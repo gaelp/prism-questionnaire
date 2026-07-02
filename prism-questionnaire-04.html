@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRISM — Questionnaire</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #1a1714;
+      --paper:     #e0d9ce;
+      --warm:      #e8dfc8;
+      --accent:    #7a5c3a;
+      --accent2:   #3a5c5a;
+      --muted:     #9a8e7e;
+      --border:    #ccc5b5;
+      --gold:      #b89a5a;
+      --required:  #8b3a2a;
+      --radius:    4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── UNIFIED SITE HEADER ── */
+    .site-header {
+      background: var(--paper);
+      text-align: center;
+      padding: 48px 0px 0;
+      border-bottom: 1px solid #d4cfc4;
+    }
+
+    .site-header-inner {
+/*    max-width: 1260px;*/
+    margin: 0 auto;
+    }
+      
+      .header-logo {
+      margin: 0px 40px 40px 0px;
+    }
+
+    .site-title {
+      display: block;
+    font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 100;
+      color: #3f495a;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      letter-spacing: .02em;
+      margin-bottom: 18px;
+      transition: color .2s;
+    }
+
+    .site-title:hover { color: var(--accent); }
+
+    .site-subtitle {
+        font-family: 'Fraunces', serif;
+        font-size: 2rem;
+        color: #2a2620;
+        margin-bottom: 28px;
+        color: white;
+        font-weight: 100;
+        line-height: 2.5rem;
+        padding-top: 2rem;
+        text-decoration: underline;
+    }
+
+    .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-bottom: 20px;
+      margin-top: 2rem;
+    }
+
+    .site-nav a {
+        font-family: 'Fraunces', serif;
+      font-size: 2.5rem;
+      color: #3f495a;
+      text-decoration: none;
+      letter-spacing: .02em;
+      transition: color .2s;
+        font-weight: 100;
+    }
+      
+      /* ── SITE BANNER ── */
+.site-banner {
+  background: #3F495A;
+  width: 100%;
+  padding: 14px 0;
+  margin-top: 12px;
+}
+
+    .site-nav a:hover { color: var(--accent); }
+
+    .site-nav a.nav-active {
+    }
+
+    .site-dots {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 14px 0 18px;
+      color: #2a2620;
+      font-size: 1.2rem;
+      opacity: .5;
+    }
+
+    /* ── QUESTIONNAIRE BANNER ── */
+    .q-banner {
+/*      background: var(--ink);*/
+/*      color: rgba(245,240,232,.8);*/
+      text-align: center;
+      padding: 22px 32px;
+      font-size: 1rem;
+      letter-spacing: .04em;
+    }
+
+    /* ── INTRO SECTION ── */
+    .intro-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 32px 0;
+    }
+
+    .intro-card {
+      background: var(--warm);
+      border-left: 3px solid var(--gold);
+      padding: 28px 32px;
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .intro-card h2 {
+        font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 100;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .intro-card p { color: #3a3228; font-size: 14px; margin-bottom: 8px; }
+    .intro-card p:last-child { margin-bottom: 0; }
+
+    /* ── MAIN FORM ── */
+    .form-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+
+    /* ── QUESTION BLOCK ── */
+    .q-block {
+      margin-bottom: 44px;
+      animation: fadeUp .5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-block:nth-child(1) { animation-delay: .05s; }
+    .q-block:nth-child(2) { animation-delay: .1s; }
+    .q-block:nth-child(3) { animation-delay: .15s; }
+    .q-block:nth-child(4) { animation-delay: .2s; }
+    .q-block:nth-child(5) { animation-delay: .25s; }
+    .q-block:nth-child(6) { animation-delay: .3s; }
+
+    .q-label {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .q-num {
+        font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .q-text {
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: .01em;
+      color: var(--ink);
+    }
+
+    .q-text .req { color: var(--required); margin-left: 2px; }
+
+    .q-hint {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      margin-left: 46px;
+      letter-spacing: .02em;
+    }
+
+    /* ── CONTROLS ── */
+    select, input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ink);
+      transition: border-color .2s, box-shadow .2s;
+      appearance: none;
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a8e7e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    select:focus, input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(58,92,90,.1);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    .select-wrap { position: relative; }
+
+    /* ── Q3 COMPACT INLINE LAYOUT ── */
+    .q3-section { margin-left: 46px; }
+
+    .q3-intro {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 0;
+      font-style: italic;
+    }
+
+    /* ── Header row (column labels) ── */
+    .q3-header {
+      display: grid;
+      grid-template-columns: 2fr 2.4fr 1.1fr 1.2fr 1fr 1.6fr 20px;
+      gap: 8px;
+      padding: 10px 0 6px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2px;
+    }
+
+    .q3-header-cell {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1.3;
+    }
+
+    /* ── One entry = one line ── */
+    .q3-entry {
+      display: grid;
+      grid-template-columns: 2fr 2.4fr 1.1fr 1.2fr 1fr 1.6fr 20px;
+      gap: 8px;
+      align-items: start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+        overflow: visible;
+    }
+
+    .q3-entry:last-of-type { border-bottom: none; }
+
+    /* hide the old "Entry N" badge — not needed in line format */
+    .q3-entry-num { display: none; }
+
+    /* ── Each cell ── */
+    .q3-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .q3-cell input[type="text"],
+    .q3-cell select {
+      padding: 6px 8px;
+      font-size: 13px;
+    }
+
+    .q3-cell select {
+      padding-right: 28px;
+      background-position: right 8px center;
+    }
+
+    /* ── Peace type: dropdown pill that opens a popover ── */
+    .peace-dropdown {
+      position: relative;
+    }
+
+    .peace-trigger {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px 28px 6px 8px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a8e7e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      transition: border-color .2s;
+    }
+
+    .peace-trigger.has-selection {
+      color: var(--ink);
+    }
+
+    .peace-trigger:focus,
+    .peace-trigger:hover {
+      border-color: var(--accent2);
+      outline: none;
+    }
+
+    .peace-popover {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      z-index: 9999;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.12);
+      padding: 6px 0;
+      min-width: 280px;
+      max-width: 320px;
+    }
+
+    .peace-popover.open { display: block; }
+
+    .peace-popover label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 300;
+      cursor: pointer;
+      transition: background .12s;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .peace-popover label:hover { background: var(--warm); }
+
+    .peace-popover input[type="checkbox"] {
+      width: auto;
+      margin-top: 3px;
+      flex-shrink: 0;
+      accent-color: var(--accent2);
+    }
+
+    /* ── Radio buttons: compact inline ── */
+    .q3-radios {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .q3-radios label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .q3-radios input[type="radio"] {
+      width: auto;
+      accent-color: var(--accent2);
+    }
+
+    /* ── Effect on society: Y/N + conditional text ── */
+    .q3-effect-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .q3-effect-desc {
+      display: none;
+    }
+
+    .q3-effect-desc.visible {
+      display: block;
+    }
+
+    .q3-effect-desc input {
+      font-size: 12px;
+      padding: 5px 7px;
+    }
+
+    /* ── Remove button ── */
+    .btn-remove-row {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 6px 2px;
+      border-radius: 3px;
+      transition: color .15s;
+      align-self: start;
+      margin-top: 6px;
+    }
+
+    .btn-remove-row:hover { color: var(--required); }
+
+    /* ── Mobile fallback: stack columns ── */
+    @media (max-width: 640px) {
+      .q3-header { display: none; }
+
+      .q3-entry {
+        grid-template-columns: 1fr;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 14px;
+        margin-bottom: 10px;
+        gap: 10px;
+      }
+
+      .q3-entry:last-of-type { border-bottom: 1px solid var(--border); }
+
+      .q3-cell::before {
+        content: attr(data-label);
+        font-size: 10.5px;
+        font-weight: 500;
+        letter-spacing: .07em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .btn-remove-row {
+        position: static;
+        align-self: flex-start;
+      }
+
+      .peace-popover {
+        min-width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    /* radio Y/N/DK */
+    .radio-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--warm);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+      color: var(--ink);
+    }
+
+    .radio-group input[type="radio"] { accent-color: var(--accent2); }
+
+    .radio-group label:has(input:checked) {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    /* Conditional text box */
+    .conditional-box {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .conditional-box.visible { display: block; }
+
+    /* Add row button */
+    .btn-add-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 9px 18px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+      margin-top: 4px;
+    }
+
+    .btn-add-row:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: rgba(58,92,90,.04);
+    }
+
+    .btn-add-row span { font-size: 18px; line-height: 1; }
+
+    /* Remove row button */
+    .btn-remove-row {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 3px;
+      transition: color .15s, background .15s;
+    }
+
+    .btn-remove-row:hover { color: var(--required); background: rgba(139,58,42,.06); }
+
+    /* ── DIVIDER ── */
+    .section-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+      opacity: .5;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-wrap {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      border-radius: var(--radius);
+      padding: 15px 44px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-submit:hover { background: var(--accent); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ── FOOTNOTE ── */
+    .footnote {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 32px 24px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .footnote p { margin: 0; }
+    .footnote .req-note { font-style: italic; }
+    .footnote .rgpd { max-width: 420px; }
+
+    /* ── FOOTER ── */
+    .mp-footer {
+      background: var(--ink);
+      color: rgba(245,240,232,.5);
+      text-align: center;
+      padding: 28px;
+      font-size: 12px;
+      letter-spacing: .04em;
+    }
+
+    .mp-footer a { color: var(--gold); text-decoration: none; }
+
+    /* ── SUCCESS OVERLAY ── */
+    #success-msg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,23,20,.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #success-msg.show { display: flex; }
+
+    .success-card {
+      background: var(--paper);
+      border-radius: 8px;
+      padding: 48px 40px;
+      max-width: 460px;
+      text-align: center;
+    }
+
+    .success-card .icon { font-size: 2.5rem; margin-bottom: 16px; }
+
+    .success-card h2 {
+        font-family: 'Fraunces', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+      color: var(--accent2);
+    }
+
+    .success-card p { font-size: 14px; color: var(--muted); }
+
+    /* ── LOADING STATE ── */
+    .btn-submit.loading {
+      opacity: .7;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .page-header { padding: 44px 24px 36px; }
+      .intro-section, .form-wrap { padding-left: 16px; padding-right: 16px; }
+      .q3-section { margin-left: 0; }
+      .footnote { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ UNIFIED SITE HEADER ══ -->
+<header class="site-header">
+ 
+ 
+<div style="display:flex; gap:20px; align-items:center; justify-content:center; flex-wrap:wrap;">
+
+  <img class="header-logo" src="img/logo-nieuwrg-en-neg-rgb-1.png" style="height:40px; width:auto;" />
+
+  <img class="header-logo" src="img/logo-prism-footer.png" style="height:30px; width:auto;" />
+
+  <img class="header-logo" src="img/tampere02-edited.png" style="height:50px; width:auto; object-fit:cover;" />
+
+  <img class="header-logo" src="img/logo-pthu.png" style="height:40px; width:auto;" />
+
+</div>
+
+ 
+  <div class="site-header-inner">
+    <a href="https://mysticismandpeace.wordpress.com/" class="site-title">Mysticism and Peace</a>
+   
+    
+    <!-- NOUVELLE BANNIERE -->
+    <div class="site-banner">
+    <p class="site-subtitle">Toward New Forms of <em>Engaged Mysticism</em><br /><br />Peace and Action : Beneficial Ripple Effects <br />of Public Mysticism in Society</p>
+    </div>
+    <!-- FIN BANNIERE -->
+    
+    <nav class="site-nav">
+      <a href="https://mysticismandpeace.wordpress.com/team/">Team</a>
+      <a href="#" class="nav-active">Questionnaire</a>
+      <a href="https://mysticismandpeace.wordpress.com/blog/">Blog</a>
+    </nav>
+    <div class="site-dots"><span>·</span><span>·</span><span>·</span></div>
+  </div>
+</header>
+
+<!-- ══ QUESTIONNAIRE INTRO BANNER ══ -->
+<div class="q-banner">
+  <p>Thank you for filling in this very short questionnaire (6 questions in total).</p>
+</div>
+
+<!-- ══ INTRO ══ -->
+<section class="intro-section">
+  <div class="intro-card">
+    <h2>About our project</h2>
+    <p>We are researching the relationship between religion, spiritual practice and peacebuilding from the 18th century onwards and any 'ripple effect' of this in wider society.</p>
+    <p>We are interested in people and movements (including very small and local) associated with peacebuilding, especially within Christianity and Buddhism (broadly defined). We are also researching whether any of these figures/movements might be classified as mystics/mystical.</p>
+    <p>All the questions relate to any people/movements you know associated with peace/peacebuilding.</p>
+  </div>
+</section>
+
+<!-- ══ FORM ══ -->
+<main class="form-wrap">
+  <!-- 
+    ══════════════════════════════════════════════════
+    FORMSPREE SETUP :
+    1. Créez un compte gratuit sur https://formspree.io
+    2. Créez un nouveau formulaire → copiez votre endpoint
+    3. Remplacez "YOUR_FORMSPREE_ID" ci-dessous par votre ID
+       Exemple : action="https://formspree.io/f/xabc1234"
+    ══════════════════════════════════════════════════
+  -->
+  <form id="prism-form" action="https://formspree.io/f/mvznolee" method="POST" novalidate>
+
+    <!-- Hidden metadata -->
+    <input type="hidden" name="_subject" value="New PRISM Questionnaire Response" />
+    <input type="hidden" name="_language" value="en" />
+
+    <!-- ── Q1 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">1</div>
+        <div>
+          <div class="q-text">Religious Tradition of person/movement <span class="req">*</span></div>
+          <div class="q-hint">Required — choose one option</div>
+        </div>
+      </div>
+      <div class="select-wrap" style="margin-left:46px">
+        <select name="q1_religious_tradition" required>
+          <option value="" disabled selected>Select a tradition…</option>
+          <option value="Buddhism">Buddhism</option>
+          <option value="Christianity">Christianity</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── Q2 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">2</div>
+        <div>
+          <div class="q-text">School / Denomination / Organisation of person/movement</div>
+          <div class="q-hint">Free text</div>
+        </div>
+      </div>
+      <div style="margin-left:46px">
+        <input type="text" name="q2_school_denomination" placeholder="e.g. Quakers, Theravāda, Franciscans…" />
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── Q3 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">3</div>
+        <div>
+          <div class="q-text">Person(s) / Movement(s) associated with peace &amp; peacebuilding <span class="req">*</span></div>
+          <div class="q-hint">One line per person or movement — add as many as needed.</div>
+        </div>
+      </div>
+
+      <div class="q3-section">
+        <p class="q3-intro">One line per person or movement — click the dropdowns to select.</p>
+
+        <!-- Column headers -->
+        <div class="q3-header">
+          <div class="q3-header-cell">Name <span style="color:var(--required)">*</span></div>
+          <div class="q3-header-cell">Type of Peace <small style="font-weight:300;text-transform:none;letter-spacing:0">(tick all)</small></div>
+          <div class="q3-header-cell">Lived when?</div>
+          <div class="q3-header-cell">Is Mystic?</div>
+          <div class="q3-header-cell">Effect on society?</div>
+          <div class="q3-header-cell">Where to find out more?</div>
+          <div></div>
+        </div>
+
+        <div id="q3-rows"></div>
+
+        <button type="button" class="btn-add-row" id="btn-add-row" style="margin-top:12px">
+          <span>+</span> Add a person / movement
+        </button>
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── Q4 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">4</div>
+        <div>
+          <div class="q-text">Which best describes how you understand mysticism?</div>
+          <div class="q-hint">While several definitions might apply, please pick the <strong>one</strong> that you consider best.</div>
+        </div>
+      </div>
+      <div style="margin-left:46px">
+        <div class="select-wrap">
+          <select name="q4_mysticism" id="q4-mysticism">
+            <option value="" disabled selected>Select a definition…</option>
+            <option value="1_ineffable">1. Ineffable experiences / ecstasy / union</option>
+            <option value="2_direct_presence">2. Preparation for / consciousness of direct presence of God / Ultimate Reality</option>
+            <option value="3_apophatic">3. Access to higher states of knowing via negation / negative language</option>
+            <option value="4_revelations">4. Revelations, visions, and other supernatural phenomena</option>
+            <option value="5_perceiving">5. Perceiving reality as it truly is</option>
+            <option value="6_transformative">6. A life that is transformed and transformative in the world</option>
+            <option value="7_other">7. Other [please briefly describe]</option>
+          </select>
+        </div>
+        <div class="conditional-box" id="q4-other-box">
+          <textarea name="q4_mysticism_other" placeholder="Please briefly describe your understanding of mysticism…" style="margin-top:0; min-height:70px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── Q5 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">5</div>
+        <div>
+          <div class="q-text">Is there anything else you would like to tell us?</div>
+          <div class="q-hint">Optional — free text</div>
+        </div>
+      </div>
+      <div style="margin-left:46px">
+        <textarea name="q5_anything_else" placeholder="Any additional thoughts, context, or information…" style="min-height:100px"></textarea>
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── Q6 ── -->
+    <div class="q-block">
+      <div class="q-label">
+        <div class="q-num">6</div>
+        <div>
+          <div class="q-text">Can we contact you for more information about any of these people/movements?</div>
+        </div>
+      </div>
+      <div style="margin-left:46px">
+        <div class="radio-group" id="q6-contact-group">
+          <label><input type="radio" name="q6_contact" value="Yes" id="q6-yes" /> Yes</label>
+          <label><input type="radio" name="q6_contact" value="No" /> No</label>
+        </div>
+        <div class="conditional-box" id="q6-email-box" style="margin-top:14px">
+          <input type="email" name="q6_email" placeholder="your.email@example.com" />
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-rule" />
+
+    <!-- ── SUBMIT ── -->
+    <div class="submit-wrap">
+      <button type="submit" class="btn-submit" id="btn-submit">
+        Submit questionnaire →
+      </button>
+    </div>
+
+  </form>
+</main>
+
+<!-- ══ FOOTNOTE ══ -->
+<div class="footnote">
+  <p class="req-note"><span style="color:var(--required)">*</span> Questions with * are required fields.</p>
+  <p class="rgpd">Your responses will be used solely for the PRISM research project. If you provide your email address, it will be used only to follow up on your answers and will not be shared with third parties.</p>
+</div>
+
+
+
+
+<style>
+.footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222;
+}
+
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+}
+
+.footer h3 {
+    margin-bottom: 20px;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+.footer p {
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.footer hr {
+    margin: 40px 0;
+    border: none;
+    border-top: 2px dotted #999;
+}
+
+.footer img {
+    display: block;
+    margin: 30px auto 20px;
+    max-width: 180px;
+    height: auto;
+}
+
+.footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-note {
+    margin: 60px auto 40px;
+    max-width: 900px;
+    text-align: center;
+}
+
+.footer-contact {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.05rem;
+}
+</style>
+
+<footer class="footer">
+
+    <div class="footer-row">
+
+        <div class="footer-col">
+            <h3>Protestant Theological University</h3>
+            <p>
+                Jansdam 14<br>
+                3512 Utrecht<br>
+                (The Netherlands)
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h3>Antwerpen University</h3>
+            <p>
+                Prinsstraat 13<br>
+                2000 Antwerpen<br>
+                Belgium
+            </p>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="footer-row">
+
+        <div class="footer-col">
+
+            <!-- Remplacer par ton image Netlify -->
+            <img style="padding-top: 40px; padding-bottom: 40px" src="img/logo-prism-footer.png" alt="PRISM">
+
+            <p>
+                <a href="https://studyingmysticism.com/" target="_blank">
+                    www.studyingmysticism.com
+                </a>
+            </p>
+
+        </div>
+
+        <div class="footer-col">
+
+            <!-- Remplacer par ton image Netlify -->
+            <img src="img/templeton_mono.png" alt="Templeton Religion Trust">
+
+            <p>
+                <a href="https://templetonreligiontrust.org/" target="_blank">
+                    templetonreligiontrust.org
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-note">
+        <p>
+            This project was made possible through the support of a grant from Templeton Religion Trust,
+            awarded via the PROGRAM IN THE STUDY OF MYSTICISM (PRISM) at Tampere University.
+        </p>
+    </div>
+
+    <div class="footer-contact">
+        <p><strong>Contact</strong></p>
+        <p><strong>info@mysticismandpeace.org</strong></p>
+    </div>
+
+</footer>
+
+
+
+
+
+<!-- ══ FOOTER ══ -->
+<footer class="mp-footer">
+  <p>Thank you for taking the time to fill in this questionnaire. Please feel free to share the link with others.<br />
+  You can find out more about our project and follow our weblog <a href="#">here</a>.</p>
+</footer>
+
+<!-- ══ SUCCESS OVERLAY ══ -->
+<div id="success-msg">
+  <div class="success-card">
+    <div class="icon">✦</div>
+    <h2>Thank you!</h2>
+    <p>Your response has been recorded. We are grateful for your contribution to the PRISM research project.<br /><br />
+    Feel free to share the questionnaire link with others who might be interested.</p>
+  </div>
+</div>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+  // ── Q3 COMPACT INLINE ROWS ───────────────────────────────────
+  const peaceOptions = [
+    "Cultivates personal/interior restfulness/calmness",
+    "Promotes activities for inner restfulness/calm/compassion (e.g. prayer/meditation/retreats/chanting/art)",
+    "Promotes activities for justice/societal well-being (e.g., structural change/environmentalism/charity/education)",
+    "Cultivates non-violence (can include sit-down protests/demonstrations)",
+    "Views peace as the goal but violence may be the means (e.g., damage to property and/or persons/direct action)",
+    "Other"
+  ];
+
+  const livedWhenOptions = [
+    "Before 1700", "1700–1800", "1800–1900", "1900–2000", "After 2000"
+  ];
+
+  let rowCount = 0;
+
+  function makeRow() {
+    rowCount++;
+    const idx = rowCount;
+    const div = document.createElement('div');
+    div.className = 'q3-entry';
+    div.dataset.row = idx;
+
+    const peaceChecks = peaceOptions.map((opt, i) =>
+      `<label><input type="checkbox" name="q3_${idx}_peace_${i}" value="${opt}" /> ${opt}</label>`
+    ).join('');
+
+    const livedOpts = livedWhenOptions.map(opt =>
+      `<option value="${opt}">${opt}</option>`
+    ).join('');
+
+    div.innerHTML = `
+      <div class="q3-entry-num">Entry ${idx}</div>
+
+      <!-- Name -->
+      <div class="q3-cell" data-label="Name">
+        <input type="text" name="q3_${idx}_name"
+          placeholder="Name"
+          ${idx===1 ? 'required' : ''} />
+      </div>
+
+      <!-- Type of Peace: popover -->
+      <div class="q3-cell" data-label="Type of Peace (tick all that apply)">
+        <div class="peace-dropdown" id="pd-${idx}">
+          <button type="button" class="peace-trigger" id="pt-${idx}" onclick="togglePeace(${idx})">
+            Select…
+          </button>
+          <div class="peace-popover" id="pp-${idx}">
+            ${peaceChecks}
+          </div>
+        </div>
+      </div>
+
+      <!-- Lived when -->
+      <div class="q3-cell" data-label="Lived when?">
+        <div class="select-wrap">
+          <select name="q3_${idx}_lived_when">
+            <option value="" disabled selected>—</option>
+            ${livedOpts}
+          </select>
+        </div>
+      </div>
+
+      <!-- Is Mystic -->
+      <div class="q3-cell" data-label="Is Mystic?">
+        <div class="q3-radios">
+          <label><input type="radio" name="q3_${idx}_is_mystic" value="Yes" /> Yes</label>
+          <label><input type="radio" name="q3_${idx}_is_mystic" value="No" /> No</label>
+          <label><input type="radio" name="q3_${idx}_is_mystic" value="Don't know" /> Don't know</label>
+        </div>
+      </div>
+
+      <!-- Effect on society -->
+      <div class="q3-cell" data-label="Effect on wider society?">
+        <div class="q3-effect-wrap">
+          <div class="q3-radios">
+            <label><input type="radio" name="q3_${idx}_effect" value="Yes" onchange="toggleEffect(${idx},true)" /> Yes</label>
+            <label><input type="radio" name="q3_${idx}_effect" value="No" onchange="toggleEffect(${idx},false)" /> No</label>
+          </div>
+          <div class="q3-effect-desc conditional-box" id="q3-${idx}-effect-desc">
+            <input type="text" name="q3_${idx}_effect_description" placeholder="Brief description…" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sources -->
+      <div class="q3-cell" data-label="Where to find out more?">
+        <input type="text" name="q3_${idx}_sources" placeholder="Books, websites…" />
+      </div>
+
+      <!-- Remove -->
+      ${idx > 1 ? `<button type="button" class="btn-remove-row" onclick="removeRow(this)" title="Remove this entry">✕</button>` : '<div></div>'}
+    `;
+
+    document.getElementById('q3-rows').appendChild(div);
+
+    // Close peace popover when clicking outside
+    document.addEventListener('click', function handler(e) {
+      const pd = document.getElementById(`pd-${idx}`);
+      if (pd && !pd.contains(e.target)) {
+        document.getElementById(`pp-${idx}`)?.classList.remove('open');
+      }
+    });
+
+    // Update trigger label when checkboxes change
+    div.querySelectorAll(`input[type="checkbox"]`).forEach(cb => {
+      cb.addEventListener('change', () => updatePeaceTrigger(idx));
+    });
+  }
+
+  function togglePeace(idx) {
+    const pp = document.getElementById(`pp-${idx}`);
+    pp.classList.toggle('open');
+  }
+
+  function updatePeaceTrigger(idx) {
+    const checked = [...document.querySelectorAll(`[name^="q3_${idx}_peace_"]:checked`)]
+      .map(cb => cb.value);
+    const trigger = document.getElementById(`pt-${idx}`);
+    if (checked.length === 0) {
+      trigger.textContent = 'Select…';
+      trigger.classList.remove('has-selection');
+    } else {
+      trigger.textContent = checked.length === 1
+        ? checked[0].length > 28 ? checked[0].slice(0, 26) + '…' : checked[0]
+        : `${checked.length} selected`;
+      trigger.classList.add('has-selection');
+    }
+  }
+
+  function removeRow(btn) {
+    btn.closest('.q3-entry').remove();
+    document.querySelectorAll('.q3-entry').forEach((el, i) => {
+      el.querySelector('.q3-entry-num').textContent = `Entry ${i + 1}`;
+    });
+  }
+
+  function toggleEffect(idx, show) {
+    const box = document.getElementById(`q3-${idx}-effect-desc`);
+    if (box) box.classList.toggle('visible', show);
+  }
+
+  // Add first row on load + wire add button
+  makeRow();
+  document.getElementById('btn-add-row').addEventListener('click', makeRow);
+
+ document.querySelectorAll('.q-block').forEach(el => {
+    el.addEventListener('animationend', () => {
+      el.style.animation = 'none';
+    });
+  });
+
+  // ── Q4 OTHER ─────────────────────────────────────────────────
+  document.getElementById('q4-mysticism').addEventListener('change', function () {
+    const box = document.getElementById('q4-other-box');
+    box.classList.toggle('visible', this.value === '7_other');
+  });
+
+  // ── Q6 EMAIL ─────────────────────────────────────────────────
+  document.getElementById('q6-contact-group').addEventListener('change', function (e) {
+    const box = document.getElementById('q6-email-box');
+    box.classList.toggle('visible', e.target.value === 'Yes');
+  });
+
+  // ── FORM SUBMIT via fetch (AJAX — no redirect) ────────────────
+  const form = document.getElementById('prism-form');
+  const btnSubmit = document.getElementById('btn-submit');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    // Basic validation: Q1 required
+    const q1 = form.querySelector('[name="q1_religious_tradition"]');
+    if (!q1.value) {
+      q1.focus();
+      q1.style.borderColor = 'var(--required)';
+      setTimeout(() => q1.style.borderColor = '', 2000);
+      return;
+    }
+
+    // Q3 row 1 name required
+    const q3name = form.querySelector('[name="q3_1_name"]');
+    if (q3name && !q3name.value.trim()) {
+      q3name.focus();
+      q3name.style.borderColor = 'var(--required)';
+      setTimeout(() => q3name.style.borderColor = '', 2000);
+      return;
+    }
+
+    btnSubmit.classList.add('loading');
+    btnSubmit.textContent = 'Sending…';
+
+    try {
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        document.getElementById('success-msg').classList.add('show');
+        form.reset();
+        // Reset Q3 rows
+        document.getElementById('q3-rows').innerHTML = '';
+        rowCount = 0;
+        makeRow();
+        // Hide conditional boxes
+        document.querySelectorAll('.conditional-box').forEach(b => b.classList.remove('visible'));
+      } else {
+        alert('There was a problem submitting the form. Please try again.');
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
+    } finally {
+      btnSubmit.classList.remove('loading');
+      btnSubmit.textContent = 'Submit questionnaire →';
+    }
+  });
+
+  // Close success overlay on click
+  document.getElementById('success-msg').addEventListener('click', function () {
+    this.classList.remove('show');
+  });
+</script>
+</body>
+</html>
