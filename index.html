@@ -1325,13 +1325,24 @@ window.addEventListener("DOMContentLoaded", () => {
     email: data.get("q6_email")
   };
 
-  await fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
+const res = await fetch(SCRIPT_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
-  document.getElementById('success-msg').classList.add('show');
-  form.reset();
+const text = await res.text();
+console.log("STATUS:", res.status);
+console.log("RESPONSE:", text);
+
+if (!res.ok) {
+  throw new Error(text || "Request failed");
+}
+
+document.getElementById('success-msg').classList.add('show');
+form.reset();
 
   // Reset Q3 rows
   document.getElementById('q3-rows').innerHTML = '';
