@@ -1324,21 +1324,21 @@ try {
     email: data.get("q6_email")
   };
 
-  console.log("SCRIPT_URL:", SCRIPT_URL);
-  console.log("PAYLOAD:", payload);
+await fetch(SCRIPT_URL, {
+  method: "POST",
+  body: formData,
+  mode: "no-cors"
+});
 
-  const formData = new FormData();
-  formData.append("data", JSON.stringify(payload));
+console.log("Formulaire envoyé");
 
-  const res = await fetch(SCRIPT_URL, {
-    method: "POST",
-    body: formData
-  });
+// succès UI
+document.getElementById('success-msg').classList.add('show');
+form.reset();
 
-  const text = await res.text();
-
-  console.log("STATUS:", res.status);
-  console.log("RESPONSE:", text);
+document.getElementById('q3-rows').innerHTML = '';
+rowCount = 0;
+makeRow();
 
   document.getElementById('success-msg').classList.add('show');
   form.reset();
