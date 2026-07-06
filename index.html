@@ -1330,7 +1330,7 @@ console.log("PAYLOAD:", payload);
      
 const res = await fetch(SCRIPT_URL, {
   method: "POST",
-  body: JSON.stringify(payload)
+  body: JSON.stringify({ data: payload })
 });
 
 const text = await res.text();
