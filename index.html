@@ -1257,46 +1257,18 @@
   });
 
   // ── FORM SUBMIT via fetch (AJAX — no redirect) ────────────────
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_OtmgiBSRNSQ2JPqJO7Eybafuf9fuUvvv21yis6cCQ_nahpOuMcTNUn4CcYWRk8lPZQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz12gONXBmfmHI6GwsRMfQC9l1TEx9ySSkmnL7mwXdbSm2xD_FtUibwJBJRfP9IUn-Cyg/exec";
   const form = document.getElementById('prism-form');
   const btnSubmit = document.getElementById('btn-submit');
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1R-r0eED5rIuNmdZt4NrdRNsnXgdAbMDDXQRikaIPiieY9EgDEUFgG2x2eDsgrdyABg/exec";
 
-    // Basic validation: Q1 required
-    const q1 = form.querySelector('[name="q1_religious_tradition"]');
-    if (!q1.value) {
-      q1.focus();
-      q1.style.borderColor = 'var(--required)';
-      setTimeout(() => q1.style.borderColor = '', 2000);
-      return;
-    }
+form.addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-    // Q3 row 1 name required
-    const q3name = form.querySelector('[name="q3_1_name"]');
-    if (q3name && !q3name.value.trim()) {
-      q3name.focus();
-      q3name.style.borderColor = 'var(--required)';
-      setTimeout(() => q3name.style.borderColor = '', 2000);
-      return;
-    }
+  const q1 = form.querySelector('[name="q1_religious_tradition"]');
+  if (!q1.value) return;
 
-    // Q6: require an email if user agreed to be contacted
-    const q6Yes = form.querySelector('[name="q6_contact"][value="Yes"]')?.checked;
-    const q6Email = form.querySelector('[name="q6_email"]');
-    if (q6Yes && q6Email && !q6Email.value.trim()) {
-      q6Email.focus();
-      q6Email.style.borderColor = 'var(--required)';
-      setTimeout(() => q6Email.style.borderColor = '', 2000);
-      return;
-    }
-
-    btnSubmit.classList.add('loading');
-    btnSubmit.textContent = 'Sending…';
-
-try {
-  const data = new FormData(form);
   const q3 = [];
   document.querySelectorAll('.q3-entry').forEach((row, i) => {
     const idx = i + 1;
@@ -1312,38 +1284,37 @@ try {
   });
 
   const payload = {
-    q1: data.get("q1_religious_tradition"),
-    q2: data.get("q2_school_denomination"),
+    q1: q1.value,
+    q2: form.querySelector('[name="q2_school_denomination"]')?.value || "",
     q3,
-    q4: data.get("q4_mysticism"),
-    q4Other: data.get("q4_mysticism_other"),
-    q5: data.get("q5_anything_else"),
-    q6: data.get("q6_contact"),
-    email: data.get("q6_email")
+    q4: form.querySelector('[name="q4_mysticism"]')?.value || "",
+    q4Other: form.querySelector('[name="q4_mysticism_other"]')?.value || "",
+    q5: form.querySelector('[name="q5_anything_else"]')?.value || "",
+    q6: form.querySelector('[name="q6_contact"]:checked')?.value || "",
+    email: form.querySelector('[name="q6_email"]')?.value || ""
   };
 
-  const formData = new FormData();
-formData.append("data", JSON.stringify(payload));
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      }
+    });
 
-fetch(SCRIPT_URL, {
-  method: "POST",
-  body: formData
+    document.getElementById('success-msg').classList.add('show');
+    form.reset();
+
+    document.getElementById('q3-rows').innerHTML = '';
+    rowCount = 0;
+    makeRow();
+
+  } catch (err) {
+    console.error(err);
+    alert("Erreur d'envoi");
+  }
 });
-
-  document.getElementById('success-msg').classList.add('show');
-  form.reset();
-  document.getElementById('q3-rows').innerHTML = '';
-  rowCount = 0;
-  makeRow();
-
-} catch (err) {
-  console.error(err);
-  alert('Network error. Please check your connection and try again.');
-} finally {
-      btnSubmit.classList.remove('loading');
-      btnSubmit.textContent = 'Submit questionnaire →';
-    }
-  });
 
   // Close success overlay on click
   document.getElementById('success-msg').addEventListener('click', function () {
