@@ -1298,12 +1298,9 @@ window.addEventListener("DOMContentLoaded", () => {
     btnSubmit.textContent = 'Sending…';
 
 try {
-  const data = new FormData(form);
-
   const q3 = [];
   document.querySelectorAll('.q3-entry').forEach((row, i) => {
     const idx = i + 1;
-
     q3.push({
       name: form.querySelector(`[name="q3_${idx}_name"]`)?.value || "",
       lived: form.querySelector(`[name="q3_${idx}_lived_when"]`)?.value || "",
@@ -1324,29 +1321,22 @@ try {
     email: data.get("q6_email")
   };
 
-await fetch(SCRIPT_URL, {
-  method: "POST",
-  body: formData,
-  mode: "no-cors"
-});
+  const params = new URLSearchParams();
+  params.append("data", JSON.stringify(payload));
 
-console.log("Formulaire envoyé");
-
-// succès UI
-document.getElementById('success-msg').classList.add('show');
-form.reset();
-
-document.getElementById('q3-rows').innerHTML = '';
-rowCount = 0;
-makeRow();
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: params
+  });
 
   document.getElementById('success-msg').classList.add('show');
   form.reset();
-
   document.getElementById('q3-rows').innerHTML = '';
   rowCount = 0;
   makeRow();
 
+}
 } catch (err) {
   console.error(err);
   alert('Network error. Please check your connection and try again.');
