@@ -111,9 +111,6 @@
 
     .site-nav a:hover { color: var(--accent); }
 
-    .site-nav a.nav-active {
-    }
-
     .site-dots {
       display: flex;
       justify-content: center;
@@ -1095,15 +1092,6 @@
 <!-- ══ SCRIPTS ══ -->
 <script>
 
-window.addEventListener("DOMContentLoaded", () => {
-  const auth = localStorage.getItem("prism_auth");
-
-  if (auth === "1") {
-    const lock = document.getElementById("lock-screen");
-    if (lock) lock.style.display = "none";
-  }
-});
-  
   // ── Q3 COMPACT INLINE ROWS ───────────────────────────────────
   const peaceOptions = [
     "Cultivates personal/interior restfulness/calmness",
@@ -1294,15 +1282,27 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Q6: require an email if user agreed to be contacted
+    const q6Yes = form.querySelector('[name="q6_contact"][value="Yes"]')?.checked;
+    const q6Email = form.querySelector('[name="q6_email"]');
+    if (q6Yes && q6Email && !q6Email.value.trim()) {
+      q6Email.focus();
+      q6Email.style.borderColor = 'var(--required)';
+      setTimeout(() => q6Email.style.borderColor = '', 2000);
+      return;
+    }
+
     btnSubmit.classList.add('loading');
     btnSubmit.textContent = 'Sending…';
 
 try {
+  const data = new FormData(form);
   const q3 = [];
   document.querySelectorAll('.q3-entry').forEach((row, i) => {
     const idx = i + 1;
     q3.push({
       name: form.querySelector(`[name="q3_${idx}_name"]`)?.value || "",
+      peace: [...form.querySelectorAll(`[name^="q3_${idx}_peace_"]:checked`)].map(cb => cb.value),
       lived: form.querySelector(`[name="q3_${idx}_lived_when"]`)?.value || "",
       mystic: form.querySelector(`[name="q3_${idx}_is_mystic"]:checked`)?.value || "",
       effect: form.querySelector(`[name="q3_${idx}_effect"]:checked`)?.value || "",
@@ -1316,6 +1316,7 @@ try {
     q2: data.get("q2_school_denomination"),
     q3,
     q4: data.get("q4_mysticism"),
+    q4Other: data.get("q4_mysticism_other"),
     q5: data.get("q5_anything_else"),
     q6: data.get("q6_contact"),
     email: data.get("q6_email")
@@ -1336,7 +1337,6 @@ try {
   rowCount = 0;
   makeRow();
 
-}
 } catch (err) {
   console.error(err);
   alert('Network error. Please check your connection and try again.');
@@ -1367,7 +1367,11 @@ function checkPw() {
 
 // Enter key support
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") checkPw();
+  const lock = document.getElementById("lock-screen");
+  const lockVisible = lock && getComputedStyle(lock).display !== "none";
+  if (e.key === "Enter" && lockVisible && document.activeElement?.id === "pw") {
+    checkPw();
+  }
 });
 
 window.addEventListener("DOMContentLoaded", () => {
