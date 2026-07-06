@@ -682,6 +682,31 @@
 </head>
 <body>
 
+  <div id="lock-screen" style="
+  position:fixed;
+  inset:0;
+  background:#e0d9ce;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:99999;
+  font-family:sans-serif;
+">
+  <h2>Accès protégé</h2>
+
+  <input id="pw" type="password" placeholder="Mot de passe"
+    style="padding:10px; margin-top:10px;">
+
+  <button onclick="checkPw()" style="
+    margin-top:10px;
+    padding:10px 20px;
+    cursor:pointer;
+  ">Entrer</button>
+
+  <p id="msg" style="color:#8b3a2a;"></p>
+</div>
+
 <!-- ══ UNIFIED SITE HEADER ══ -->
 <header class="site-header">
  
@@ -1292,6 +1317,24 @@
   document.getElementById('success-msg').addEventListener('click', function () {
     this.classList.remove('show');
   });
+
+  const PASSWORD = "prism2026"; // ← change ici
+
+function checkPw() {
+  const input = document.getElementById("pw").value;
+
+  if (input === PASSWORD) {
+    document.getElementById("lock-screen").style.display = "none";
+  } else {
+    document.getElementById("msg").textContent = "Wrong password";
+  }
+}
+
+// option : enter key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") checkPw();
+});
+  
 </script>
 </body>
 </html>
