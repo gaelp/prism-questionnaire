@@ -1094,6 +1094,16 @@
 
 <!-- ══ SCRIPTS ══ -->
 <script>
+
+window.addEventListener("DOMContentLoaded", () => {
+  const auth = localStorage.getItem("prism_auth");
+
+  if (auth === "1") {
+    const lock = document.getElementById("lock-screen");
+    if (lock) lock.style.display = "none";
+  }
+});
+  
   // ── Q3 COMPACT INLINE ROWS ───────────────────────────────────
   const peaceOptions = [
     "Cultivates personal/interior restfulness/calmness",
