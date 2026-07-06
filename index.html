@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRISM — QUE-03</title>
+  <title>PRISM — QUE-05</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -1094,12 +1094,13 @@
 
   console.log("SCRIPT CHARGÉ");
 
-  const PASSWORD = "prism2026";
+  window.PASSWORD = "prism2026";
+window.SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz12gONXBmfmHI6GwsRMfQC9l1TEx9ySSkmnL7mwXdbSm2xD_FtUibwJBJRfP9IUn-Cyg/exec";
 
 window.checkPw = function () {
   const input = document.getElementById("pw").value;
 
-  if (input === PASSWORD) {
+  if (input === window.PASSWORD) {
     localStorage.setItem("prism_auth", "1");
     localStorage.setItem("prism_auth_time", Date.now());
     document.getElementById("lock-screen").style.display = "none";
@@ -1273,8 +1274,8 @@ window.checkPw = function () {
   });
 
   // ── FORM SUBMIT via fetch (AJAX — no redirect) ────────────────
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz12gONXBmfmHI6GwsRMfQC9l1TEx9ySSkmnL7mwXdbSm2xD_FtUibwJBJRfP9IUn-Cyg/exec";
-
+  
+const form = document.getElementById("prism-form");
 form.addEventListener('submit', async function (e) {
   e.preventDefault();
 
@@ -1311,7 +1312,7 @@ form.addEventListener('submit', async function (e) {
       method: "POST",
       body: JSON.stringify(payload),
       headers: {
-        "Content-Type": "text/plain;charset=utf-8"
+        "Content-Type": "application/json"
       }
     });
 
