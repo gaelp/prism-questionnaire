@@ -1329,6 +1329,12 @@ function checkPw() {
   } else {
     document.getElementById("msg").textContent = "Wrong password";
   }
+
+  if (res.ok) {
+    localStorage.setItem("prism_auth", "1");
+    window.location.href = "/questionnaire.html";
+  }
+  
 }
 
 // option : enter key
