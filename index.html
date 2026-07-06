@@ -1297,10 +1297,9 @@ window.addEventListener("DOMContentLoaded", () => {
     btnSubmit.classList.add('loading');
     btnSubmit.textContent = 'Sending…';
 
-   try {
+try {
   const data = new FormData(form);
 
-  // ── rebuild Q3 ──
   const q3 = [];
   document.querySelectorAll('.q3-entry').forEach((row, i) => {
     const idx = i + 1;
@@ -1325,29 +1324,31 @@ window.addEventListener("DOMContentLoaded", () => {
     email: data.get("q6_email")
   };
 
-const formData = new FormData();
-formData.append("data", JSON.stringify(payload));
+  console.log("SCRIPT_URL:", SCRIPT_URL);
+  console.log("PAYLOAD:", payload);
 
-await fetch(SCRIPT_URL, {
-  method: "POST",
-  mode: "no-cors",
-  body: formData
-});
+  const formData = new FormData();
+  formData.append("data", JSON.stringify(payload));
 
-// succès direct (no-cors = pas de réponse exploitable)
-document.getElementById('success-msg').classList.add('show');
-form.reset();
+  const res = await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: formData
+  });
 
-// Reset Q3 rows
-document.getElementById('q3-rows').innerHTML = '';
-rowCount = 0;
-makeRow();
+  const text = await res.text();
 
-// Hide conditional boxes
-document.querySelectorAll('.conditional-box')
-  .forEach(b => b.classList.remove('visible'));
+  console.log("STATUS:", res.status);
+  console.log("RESPONSE:", text);
+
+  document.getElementById('success-msg').classList.add('show');
+  form.reset();
+
+  document.getElementById('q3-rows').innerHTML = '';
+  rowCount = 0;
+  makeRow();
 
 } catch (err) {
+  console.error(err);
   alert('Network error. Please check your connection and try again.');
 } finally {
       btnSubmit.classList.remove('loading');
