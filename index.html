@@ -1094,6 +1094,20 @@
 
   console.log("SCRIPT CHARGÉ");
 
+  const PASSWORD = "prism2026";
+
+window.checkPw = function () {
+  const input = document.getElementById("pw").value;
+
+  if (input === PASSWORD) {
+    localStorage.setItem("prism_auth", "1");
+    localStorage.setItem("prism_auth_time", Date.now());
+    document.getElementById("lock-screen").style.display = "none";
+  } else {
+    document.getElementById("msg").textContent = "Wrong password";
+  }
+};
+
   // ── Q3 COMPACT INLINE ROWS ───────────────────────────────────
   const peaceOptions = [
     "Cultivates personal/interior restfulness/calmness",
@@ -1318,20 +1332,6 @@ form.addEventListener('submit', async function (e) {
   document.getElementById('success-msg').addEventListener('click', function () {
     this.classList.remove('show');
   });
-
-const PASSWORD = "prism2026";
-
-function checkPw() {
-  const input = document.getElementById("pw").value;
-
-  if (input === PASSWORD) {
-    localStorage.setItem("prism_auth", "1");
-    localStorage.setItem("prism_auth_time", Date.now());
-    document.getElementById("lock-screen").style.display = "none";
-  } else {
-    document.getElementById("msg").textContent = "Wrong password";
-  }
-}
 
 // Enter key support
 document.addEventListener("keydown", (e) => {
