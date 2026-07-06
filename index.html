@@ -1319,25 +1319,20 @@
     this.classList.remove('show');
   });
 
-  const PASSWORD = "prism2026"; // ← change ici
+const PASSWORD = "prism2026";
 
 function checkPw() {
   const input = document.getElementById("pw").value;
 
   if (input === PASSWORD) {
+    localStorage.setItem("prism_auth", "1");
     document.getElementById("lock-screen").style.display = "none";
   } else {
     document.getElementById("msg").textContent = "Wrong password";
   }
-
-  if (res.ok) {
-    localStorage.setItem("prism_auth", "1");
-    window.location.href = "/questionnaire.html";
-  }
-  
 }
 
-// option : enter key
+// Enter key support
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") checkPw();
 });
