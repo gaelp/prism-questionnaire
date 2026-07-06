@@ -1336,6 +1336,7 @@ function checkPw() {
 
   if (input === PASSWORD) {
     localStorage.setItem("prism_auth", "1");
+    localStorage.setItem("prism_auth_time", Date.now());
     document.getElementById("lock-screen").style.display = "none";
   } else {
     document.getElementById("msg").textContent = "Wrong password";
@@ -1345,6 +1346,21 @@ function checkPw() {
 // Enter key support
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") checkPw();
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const auth = localStorage.getItem("prism_auth");
+  const time = localStorage.getItem("prism_auth_time");
+
+  const oneHour = 60 * 60 * 1000;
+
+  if (auth === "1" && time && (Date.now() - time < oneHour)) {
+    const lock = document.getElementById("lock-screen");
+    if (lock) lock.style.display = "none";
+  } else {
+    localStorage.removeItem("prism_auth");
+    localStorage.removeItem("prism_auth_time");
+  }
 });
   
 </script>
