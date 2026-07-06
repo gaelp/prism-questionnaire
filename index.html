@@ -1325,6 +1325,9 @@ window.addEventListener("DOMContentLoaded", () => {
     email: data.get("q6_email")
   };
 
+     console.log("SCRIPT_URL:", SCRIPT_URL);
+console.log("PAYLOAD:", payload);
+     
 const res = await fetch(SCRIPT_URL, {
   method: "POST",
   headers: {
