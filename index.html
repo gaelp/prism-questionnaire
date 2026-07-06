@@ -1331,8 +1331,12 @@ console.log("PAYLOAD:", payload);
 const formData = new FormData();
 formData.append("data", JSON.stringify(payload));
 
-const res = await fetch(SCRIPT_URL, {
+const formData = new FormData();
+formData.append("data", JSON.stringify(payload));
+
+await fetch(SCRIPT_URL, {
   method: "POST",
+  mode: "no-cors",
   body: formData
 });
 
