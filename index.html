@@ -1269,6 +1269,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // ── FORM SUBMIT via fetch (AJAX — no redirect) ────────────────
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxi-FUKmuwv_OttSNNXvqx76GYDU9OvsfwypplbiZDPd-Lz2VpkXfTVu3qZXV8zTzMr/exec";
   const form = document.getElementById('prism-form');
   const btnSubmit = document.getElementById('btn-submit');
 
@@ -1296,29 +1297,54 @@ window.addEventListener("DOMContentLoaded", () => {
     btnSubmit.classList.add('loading');
     btnSubmit.textContent = 'Sending…';
 
-    try {
-      const data = new FormData(form);
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
+   try {
+  const data = new FormData(form);
 
-      if (response.ok) {
-        document.getElementById('success-msg').classList.add('show');
-        form.reset();
-        // Reset Q3 rows
-        document.getElementById('q3-rows').innerHTML = '';
-        rowCount = 0;
-        makeRow();
-        // Hide conditional boxes
-        document.querySelectorAll('.conditional-box').forEach(b => b.classList.remove('visible'));
-      } else {
-        alert('There was a problem submitting the form. Please try again.');
-      }
-    } catch (err) {
-      alert('Network error. Please check your connection and try again.');
-    } finally {
+  // ── rebuild Q3 ──
+  const q3 = [];
+  document.querySelectorAll('.q3-entry').forEach((row, i) => {
+    const idx = i + 1;
+
+    q3.push({
+      name: form.querySelector(`[name="q3_${idx}_name"]`)?.value || "",
+      lived: form.querySelector(`[name="q3_${idx}_lived_when"]`)?.value || "",
+      mystic: form.querySelector(`[name="q3_${idx}_is_mystic"]:checked`)?.value || "",
+      effect: form.querySelector(`[name="q3_${idx}_effect"]:checked`)?.value || "",
+      effectDesc: form.querySelector(`[name="q3_${idx}_effect_description"]`)?.value || "",
+      sources: form.querySelector(`[name="q3_${idx}_sources"]`)?.value || ""
+    });
+  });
+
+  const payload = {
+    q1: data.get("q1_religious_tradition"),
+    q2: data.get("q2_school_denomination"),
+    q3,
+    q4: data.get("q4_mysticism"),
+    q5: data.get("q5_anything_else"),
+    q6: data.get("q6_contact"),
+    email: data.get("q6_email")
+  };
+
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  document.getElementById('success-msg').classList.add('show');
+  form.reset();
+
+  // Reset Q3 rows
+  document.getElementById('q3-rows').innerHTML = '';
+  rowCount = 0;
+  makeRow();
+
+  // Hide conditional boxes
+  document.querySelectorAll('.conditional-box')
+    .forEach(b => b.classList.remove('visible'));
+
+} catch (err) {
+  alert('Network error. Please check your connection and try again.');
+} finally {
       btnSubmit.classList.remove('loading');
       btnSubmit.textContent = 'Submit questionnaire →';
     }
