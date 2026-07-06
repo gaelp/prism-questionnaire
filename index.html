@@ -1325,12 +1325,6 @@ window.addEventListener("DOMContentLoaded", () => {
     email: data.get("q6_email")
   };
 
-     console.log("SCRIPT_URL:", SCRIPT_URL);
-console.log("PAYLOAD:", payload);
-     
-const formData = new FormData();
-formData.append("data", JSON.stringify(payload));
-
 const formData = new FormData();
 formData.append("data", JSON.stringify(payload));
 
@@ -1340,33 +1334,18 @@ await fetch(SCRIPT_URL, {
   body: formData
 });
 
-const text = await res.text();
-console.log("STATUS:", res.status);
-console.log("RESPONSE:", text);
-
-if (!res.ok) {
-  throw new Error(text || "Request failed");
-}
-
-const text = await res.text();
-console.log("STATUS:", res.status);
-console.log("RESPONSE:", text);
-
-if (!res.ok) {
-  throw new Error(text || "Request failed");
-}
-
+// succès direct (no-cors = pas de réponse exploitable)
 document.getElementById('success-msg').classList.add('show');
 form.reset();
 
-  // Reset Q3 rows
-  document.getElementById('q3-rows').innerHTML = '';
-  rowCount = 0;
-  makeRow();
+// Reset Q3 rows
+document.getElementById('q3-rows').innerHTML = '';
+rowCount = 0;
+makeRow();
 
-  // Hide conditional boxes
-  document.querySelectorAll('.conditional-box')
-    .forEach(b => b.classList.remove('visible'));
+// Hide conditional boxes
+document.querySelectorAll('.conditional-box')
+  .forEach(b => b.classList.remove('visible'));
 
 } catch (err) {
   alert('Network error. Please check your connection and try again.');
