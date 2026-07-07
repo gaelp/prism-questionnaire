@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRISM — Résultats du questionnaire 02</title>
+  <title>PRISM — Résultats du questionnaire</title>
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Fraunces:wght@100..900&display=swap" rel="stylesheet" />
 
   <!-- ══ FIREBASE SDK ══ -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- ══ CHART.JS ══ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +37,6 @@
       min-height: 100vh;
     }
 
-    /* ── LOCK SCREEN ── */
     #lock-screen {
       position: fixed;
       inset: 0;
@@ -66,8 +68,7 @@
     }
     #lock-msg { color: #8b3a2a; margin-top: 10px; min-height: 20px; }
 
-    /* ── PAGE ── */
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+    .wrap { max-width: 1300px; margin: 0 auto; padding: 40px 24px 80px; }
 
     h1 {
       font-family: 'Fraunces', serif;
@@ -75,6 +76,14 @@
       font-size: 2rem;
       color: #365174;
       margin-bottom: 8px;
+    }
+
+    h2.section-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 1.3rem;
+      color: var(--accent2);
+      margin: 36px 0 16px;
     }
 
     .subtitle { color: var(--muted); margin-bottom: 24px; }
@@ -107,6 +116,72 @@
       font-size: 13px;
     }
     button.action:hover { background: var(--accent); }
+    button.action.secondary { background: transparent; color: var(--accent2); border: 1px solid var(--accent2); }
+    button.action.secondary:hover { background: var(--warm); }
+
+    .filters {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: end;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 160px;
+    }
+    .filter-group label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+    .filter-group select,
+    .filter-group input[type="text"],
+    .filter-group input[type="date"] {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      background: #fff;
+    }
+    .filter-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+    }
+    .filter-checkboxes label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .chart-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+    }
+    .chart-card h3 {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent2);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .chart-card .chart-wrap { position: relative; height: 220px; }
 
     .table-scroll {
       overflow-x: auto;
@@ -134,9 +209,6 @@
     }
 
     tr:hover td { background: #faf8f3; }
-
-    .q3-list { margin: 0; padding-left: 16px; }
-    .q3-list li { margin-bottom: 6px; }
 
     .q3-cards { display: flex; flex-direction: column; gap: 10px; min-width: 280px; }
     .q3-card {
@@ -194,9 +266,65 @@
     <h1>Résultats du questionnaire PRISM</h1>
     <p class="subtitle">Vue partagée des réponses collectées via Firestore.</p>
 
+    <h2 class="section-title">Synthèse</h2>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Q1 — Tradition religieuse</h3>
+        <div class="chart-wrap"><canvas id="chart-q1"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Q4 — Compréhension du mysticisme</h3>
+        <div class="chart-wrap"><canvas id="chart-q4"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Q3 — Types de paix cités</h3>
+        <div class="chart-wrap"><canvas id="chart-peace"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Q3 — Figures jugées mystiques</h3>
+        <div class="chart-wrap"><canvas id="chart-mystic"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Réponses dans le temps</h3>
+        <div class="chart-wrap"><canvas id="chart-timeline"></canvas></div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Réponses détaillées</h2>
+
+    <div class="filters">
+      <div class="filter-group">
+        <label>Tradition (Q1)</label>
+        <select id="f-q1">
+          <option value="">Toutes</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Du</label>
+        <input type="date" id="f-date-from" />
+      </div>
+      <div class="filter-group">
+        <label>Au</label>
+        <input type="date" id="f-date-to" />
+      </div>
+      <div class="filter-group" style="flex: 1; min-width: 200px;">
+        <label>Recherche (nom cité, Q5...)</label>
+        <input type="text" id="f-search" placeholder="Rechercher…" />
+      </div>
+      <div class="filter-group">
+        <div class="filter-checkboxes">
+          <label><input type="checkbox" id="f-email-only" /> Email fourni uniquement</label>
+          <label><input type="checkbox" id="f-mystic-only" /> Au moins une figure mystique</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="action secondary" id="btn-reset-filters">Réinitialiser</button>
+      </div>
+    </div>
+
     <div class="toolbar">
       <div class="count-badge" id="count-badge">Chargement…</div>
-      <button class="action" id="btn-csv">Télécharger en CSV</button>
+      <button class="action" id="btn-csv">Télécharger en CSV (résultats filtrés)</button>
     </div>
 
     <div class="table-scroll">
@@ -216,12 +344,22 @@
         <tbody id="results-body"></tbody>
       </table>
       <div class="loading-state" id="loading-state">Chargement des réponses…</div>
-      <div class="empty-state" id="empty-state" style="display:none;">Aucune réponse pour le moment.</div>
+      <div class="empty-state" id="empty-state" style="display:none;">Aucune réponse ne correspond aux filtres.</div>
     </div>
   </div>
 
   <script>
     const RESULTS_PASSWORD = "prism2026results";
+
+    const Q4_LABELS = {
+      "1_ineffable": "1. Ineffable / ecstasy",
+      "2_direct_presence": "2. Direct presence of God",
+      "3_apophatic": "3. Apophatic / negation",
+      "4_revelations": "4. Revelations / visions",
+      "5_perceiving": "5. Perceiving true reality",
+      "6_transformative": "6. Transformative life",
+      "7_other": "7. Other"
+    };
 
     window.checkPw = function () {
       const input = document.getElementById("pw").value;
@@ -245,7 +383,6 @@
       }
     });
 
-    // ── FIREBASE CONFIG (même projet que le questionnaire) ──
     const firebaseConfig = {
       apiKey: "AIzaSyCGP5KCkxhnfpp2AEvrA3Xx55twzyL4gd0",
       authDomain: "prism-questionnaire.firebaseapp.com",
@@ -259,11 +396,20 @@
     const db = firebase.firestore();
 
     let allRows = [];
+    let filteredRows = [];
+    let charts = {};
+
+    const CHART_COLORS = ["#3a5c5a", "#7a5c3a", "#b89a5a", "#8b3a2a", "#365174", "#9a8e7e", "#5c7a3a"];
 
     function fmtDate(ts) {
       if (!ts) return "—";
       const d = ts.toDate ? ts.toDate() : new Date(ts);
       return d.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function toDateObj(ts) {
+      if (!ts) return null;
+      return ts.toDate ? ts.toDate() : new Date(ts);
     }
 
     function renderQ3(q3) {
@@ -298,61 +444,235 @@
       }[m]));
     }
 
-    async function loadResults() {
+    function populateQ1Filter() {
+      const select = document.getElementById("f-q1");
+      const values = [...new Set(allRows.map(r => r.q1).filter(Boolean))].sort();
+      select.innerHTML = '<option value="">Toutes</option>' +
+        values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+    }
+
+    function getFilters() {
+      return {
+        q1: document.getElementById("f-q1").value,
+        dateFrom: document.getElementById("f-date-from").value,
+        dateTo: document.getElementById("f-date-to").value,
+        search: document.getElementById("f-search").value.trim().toLowerCase(),
+        emailOnly: document.getElementById("f-email-only").checked,
+        mysticOnly: document.getElementById("f-mystic-only").checked
+      };
+    }
+
+    function applyFilters() {
+      const f = getFilters();
+
+      filteredRows = allRows.filter(d => {
+        if (f.q1 && d.q1 !== f.q1) return false;
+
+        const date = toDateObj(d.submittedAt);
+        if (f.dateFrom && date && date < new Date(f.dateFrom)) return false;
+        if (f.dateTo && date) {
+          const to = new Date(f.dateTo);
+          to.setHours(23, 59, 59, 999);
+          if (date > to) return false;
+        }
+
+        if (f.emailOnly && !d.email) return false;
+
+        const q3 = Array.isArray(d.q3) ? d.q3 : [];
+        if (f.mysticOnly && !q3.some(e => e.mystic === "Yes")) return false;
+
+        if (f.search) {
+          const haystack = [
+            d.q5 || "",
+            ...q3.map(e => e.name || "")
+          ].join(" ").toLowerCase();
+          if (!haystack.includes(f.search)) return false;
+        }
+
+        return true;
+      });
+
+      renderTable(filteredRows);
+      renderCharts(filteredRows);
+    }
+
+    function renderTable(rows) {
       const loading = document.getElementById("loading-state");
       const empty = document.getElementById("empty-state");
       const table = document.getElementById("results-table");
       const tbody = document.getElementById("results-body");
       const countBadge = document.getElementById("count-badge");
 
+      loading.style.display = "none";
+
+      if (rows.length === 0) {
+        table.style.display = "none";
+        empty.style.display = "block";
+        countBadge.textContent = "0 réponse";
+        return;
+      }
+
+      empty.style.display = "none";
+      table.style.display = "table";
+      tbody.innerHTML = "";
+
+      rows.forEach(d => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${fmtDate(d.submittedAt)}</td>
+          <td>${escapeHtml(d.q1 || "—")}</td>
+          <td>${escapeHtml(d.q2 || "—")}</td>
+          <td>${renderQ3(d.q3)}</td>
+          <td>${escapeHtml(d.q4 || "—")}${d.q4Other ? " — " + escapeHtml(d.q4Other) : ""}</td>
+          <td>${escapeHtml(d.q5 || "—")}</td>
+          <td>${escapeHtml(d.q6 || "—")}</td>
+          <td>${escapeHtml(d.email || "—")}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      countBadge.textContent = `${rows.length} réponse${rows.length > 1 ? "s" : ""}` +
+        (rows.length !== allRows.length ? ` (sur ${allRows.length})` : "");
+    }
+
+    function makeChart(id, config) {
+      const ctx = document.getElementById(id);
+      if (charts[id]) charts[id].destroy();
+      charts[id] = new Chart(ctx, config);
+    }
+
+    function renderCharts(rows) {
+      const q1Counts = {};
+      rows.forEach(d => { if (d.q1) q1Counts[d.q1] = (q1Counts[d.q1] || 0) + 1; });
+      makeChart("chart-q1", {
+        type: "doughnut",
+        data: {
+          labels: Object.keys(q1Counts),
+          datasets: [{ data: Object.values(q1Counts), backgroundColor: CHART_COLORS }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } } } }
+      });
+
+      const q4Counts = {};
+      rows.forEach(d => { if (d.q4) q4Counts[d.q4] = (q4Counts[d.q4] || 0) + 1; });
+      const q4Keys = Object.keys(q4Counts).sort();
+      makeChart("chart-q4", {
+        type: "bar",
+        data: {
+          labels: q4Keys.map(k => Q4_LABELS[k] || k),
+          datasets: [{ data: q4Keys.map(k => q4Counts[k]), backgroundColor: "#3a5c5a" }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 10 } } } }
+        }
+      });
+
+      const peaceCounts = {};
+      rows.forEach(d => {
+        (Array.isArray(d.q3) ? d.q3 : []).forEach(e => {
+          (e.peace || []).forEach(p => { peaceCounts[p] = (peaceCounts[p] || 0) + 1; });
+        });
+      });
+      const peaceKeys = Object.keys(peaceCounts).sort((a, b) => peaceCounts[b] - peaceCounts[a]);
+      makeChart("chart-peace", {
+        type: "bar",
+        data: {
+          labels: peaceKeys.map(k => k.length > 40 ? k.slice(0, 40) + "…" : k),
+          datasets: [{ data: peaceKeys.map(k => peaceCounts[k]), backgroundColor: "#7a5c3a" }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 9 } } } }
+        }
+      });
+
+      let mysticYes = 0, mysticNo = 0;
+      rows.forEach(d => {
+        (Array.isArray(d.q3) ? d.q3 : []).forEach(e => {
+          if (e.mystic === "Yes") mysticYes++;
+          else if (e.mystic === "No") mysticNo++;
+        });
+      });
+      makeChart("chart-mystic", {
+        type: "pie",
+        data: {
+          labels: ["Mystique", "Non mystique"],
+          datasets: [{ data: [mysticYes, mysticNo], backgroundColor: ["#b89a5a", "#9a8e7e"] }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 } } } } }
+      });
+
+      const dayCounts = {};
+      rows.forEach(d => {
+        const date = toDateObj(d.submittedAt);
+        if (!date) return;
+        const key = date.toISOString().slice(0, 10);
+        dayCounts[key] = (dayCounts[key] || 0) + 1;
+      });
+      const dayKeys = Object.keys(dayCounts).sort();
+      makeChart("chart-timeline", {
+        type: "line",
+        data: {
+          labels: dayKeys,
+          datasets: [{ data: dayKeys.map(k => dayCounts[k]), borderColor: "#365174", backgroundColor: "rgba(54,81,116,0.15)", fill: true, tension: 0.2 }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { font: { size: 9 } } }, y: { ticks: { stepSize: 1 } } }
+        }
+      });
+    }
+
+    async function loadResults() {
+      const loading = document.getElementById("loading-state");
+      const countBadge = document.getElementById("count-badge");
+
       try {
         const snapshot = await db.collection("reponses").orderBy("submittedAt", "desc").get();
 
-        if (snapshot.empty) {
-          loading.style.display = "none";
-          empty.style.display = "block";
-          countBadge.textContent = "0 réponse";
-          return;
-        }
-
         allRows = [];
-        tbody.innerHTML = "";
+        snapshot.forEach(doc => allRows.push(doc.data()));
 
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          allRows.push(d);
-
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${fmtDate(d.submittedAt)}</td>
-            <td>${escapeHtml(d.q1 || "—")}</td>
-            <td>${escapeHtml(d.q2 || "—")}</td>
-            <td>${renderQ3(d.q3)}</td>
-            <td>${escapeHtml(d.q4 || "—")}${d.q4Other ? " — " + escapeHtml(d.q4Other) : ""}</td>
-            <td>${escapeHtml(d.q5 || "—")}</td>
-            <td>${escapeHtml(d.q6 || "—")}</td>
-            <td>${escapeHtml(d.email || "—")}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-
-        loading.style.display = "none";
-        table.style.display = "table";
-        countBadge.textContent = `${snapshot.size} réponse${snapshot.size > 1 ? "s" : ""}`;
+        populateQ1Filter();
+        applyFilters();
 
       } catch (err) {
         console.error(err);
         loading.textContent = "Erreur de chargement. Vérifie les règles Firestore (allow read) et la console pour plus de détails.";
+        countBadge.textContent = "Erreur";
       }
     }
 
+    ["f-q1", "f-date-from", "f-date-to", "f-search", "f-email-only", "f-mystic-only"].forEach(id => {
+      document.getElementById(id).addEventListener("input", applyFilters);
+    });
+
+    document.getElementById("btn-reset-filters").addEventListener("click", () => {
+      document.getElementById("f-q1").value = "";
+      document.getElementById("f-date-from").value = "";
+      document.getElementById("f-date-to").value = "";
+      document.getElementById("f-search").value = "";
+      document.getElementById("f-email-only").checked = false;
+      document.getElementById("f-mystic-only").checked = false;
+      applyFilters();
+    });
+
     document.getElementById("btn-csv").addEventListener("click", () => {
-      if (allRows.length === 0) { alert("Aucune donnée à exporter."); return; }
+      if (filteredRows.length === 0) { alert("Aucune donnée à exporter."); return; }
 
       const headers = ["Date", "Q1", "Q2", "Q3 (résumé)", "Q4", "Q4 autre", "Q5", "Q6", "Email"];
       const csvRows = [headers.join(",")];
 
-      allRows.forEach(d => {
+      filteredRows.forEach(d => {
         const q3Summary = Array.isArray(d.q3)
           ? d.q3.map(e => `${e.name || ""} (${e.lived || ""})`).join(" | ")
           : "";
