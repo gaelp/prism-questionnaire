@@ -257,7 +257,9 @@
       border-radius: 10px;
       padding: 2px 8px;
       font-size: 11px;
-      white-space: nowrap;
+      white-space: normal;
+      word-break: break-word;
+      max-width: 100%;
     }
     .q3-empty { color: var(--muted); font-style: italic; font-size: 12px; }
 
@@ -707,14 +709,13 @@
         allRows = [];
         snapshot.forEach(doc => allRows.push(doc.data()));
 
-        populateQ1Filter();
-        applyFilters();
-
       } catch (err) {
         console.error(err);
         loading.textContent = "Erreur de chargement. Vérifie les règles Firestore (allow read) et la console pour plus de détails.";
         countBadge.textContent = "Erreur";
       }
+      populateQ1Filter();
+      applyFilters();
     }
 
     document.querySelectorAll("#results-table th.sortable").forEach(th => {
