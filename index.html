@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- ══ FIREBASE SDK ══ -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <style>
     /* ── RESET & BASE ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1095,7 +1100,21 @@
   console.log("SCRIPT CHARGÉ");
 
   window.PASSWORD = "prism2026";
-window.SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz12gONXBmfmHI6GwsRMfQC9l1TEx9ySSkmnL7mwXdbSm2xD_FtUibwJBJRfP9IUn-Cyg/exec";
+
+  // ── FIREBASE CONFIG ──
+  // ⚠️ Remplace ces valeurs par CELLES de ton propre projet Firebase
+  // (Console Firebase → Paramètres du projet → Général → Vos applications → objet firebaseConfig)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCGP5KCkxhnfpp2AEvrA3Xx55twzyL4gd0",
+    authDomain: "prism-questionnaire.firebaseapp.com",
+    projectId: "prism-questionnaire",
+    storageBucket: "prism-questionnaire.firebasestorage.app",
+    messagingSenderId: "807778392810",
+    appId: "1:807778392810:web:cbe1b23e820ee3d894d593"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
 window.checkPw = function () {
   const input = document.getElementById("pw").value;
@@ -1308,12 +1327,9 @@ form.addEventListener('submit', async function (e) {
   };
 
   try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json"
-      }
+    await db.collection("reponses").add({
+      ...payload,
+      submittedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     document.getElementById('success-msg').classList.add('show');
