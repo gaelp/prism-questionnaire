@@ -757,7 +757,13 @@
 
       filteredRows.forEach(d => {
         const q3Summary = Array.isArray(d.q3)
-          ? d.q3.map(e => `${e.name || ""} (${e.lived || ""})`).join(" | ")
+          ? d.q3.map(e => {
+              const peace = (e.peace || []).join("; ");
+              const effect = e.effect
+                ? `${e.effect}${e.effect === "Yes" && e.effectDesc ? " (" + e.effectDesc + ")" : ""}`
+                : "";
+              return `${e.name || ""} | Vécu: ${e.lived || ""} | Mystique: ${e.mystic || ""} | Paix: ${peace} | Effet: ${effect} | Sources: ${e.sources || ""}`;
+            }).join(" || ")
           : "";
         const row = [
           fmtDate(d.submittedAt),
